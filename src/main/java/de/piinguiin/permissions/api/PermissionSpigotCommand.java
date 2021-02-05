@@ -2,29 +2,26 @@ package de.piinguiin.permissions.api;
 
 import de.piinguiin.permissions.Permissions;
 import de.piinguiin.permissions.groups.PermissionGroupManager;
-import de.piinguiin.permissions.user.PermissionUserManager;
 import de.piinguiin.permissions.uuid.UUIDFetcher;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PermissionSpigotCommand implements CommandExecutor {
+public class PermissionSpigotCommand extends Command {
 
   private final Permissions permissions;
   private final PermissionGroupManager groupManager;
-  private final PermissionUserManager userManager;
 
   public PermissionSpigotCommand(Permissions permissions) {
+    super("Permission");
     this.permissions = permissions;
     this.groupManager = permissions.getPermissionGroupManager();
-    this.userManager = permissions.getPermissionUserManager();
   }
 
   @Override
-  public boolean onCommand(CommandSender commandSender,Command command, String s, String[] args) {
+  public boolean execute(CommandSender commandSender, String s, String[] args) {
 
     if(!commandSender.hasPermission("permission.edit")){
       return false;

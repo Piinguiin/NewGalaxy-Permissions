@@ -2,7 +2,6 @@ package de.piinguiin.permissions.api;
 
 import de.piinguiin.permissions.Permissions;
 import de.piinguiin.permissions.groups.PermissionGroupManager;
-import de.piinguiin.permissions.user.PermissionUserManager;
 import de.piinguiin.permissions.uuid.UUIDFetcher;
 import java.util.UUID;
 import net.md_5.bungee.api.CommandSender;
@@ -17,14 +16,12 @@ public class PermissionProxyCommand extends Command {
   private final Permissions permissions;
   private final Plugin plugin;
   private final PermissionGroupManager groupManager;
-  private final PermissionUserManager userManager;
 
   public PermissionProxyCommand(Permissions permissions, Plugin plugin) {
     super("Permission","permission.edit","permissions");
     this.permissions = permissions;
     this.plugin = plugin;
     this.groupManager = permissions.getPermissionGroupManager();
-    this.userManager = permissions.getPermissionUserManager();
   }
 
   @Override
