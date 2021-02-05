@@ -162,6 +162,8 @@ public class PermissionProxyCommand extends Command {
     commandSender.sendMessage(
         new TextComponent("§cSpieler Gruppe zuweisen: /Permission user group <Spieler> <Gruppe>"));
     commandSender.sendMessage(
+        new TextComponent("§cSpieler Gruppe anzeigen: /Permission user group <Spieler> info"));
+    commandSender.sendMessage(
         new TextComponent("§cSpieler Prefix zuweisen: /Permission user prefix <Spieler> <Prefix>"));
   }
 
@@ -169,7 +171,7 @@ public class PermissionProxyCommand extends Command {
     commandSender.sendMessage(
         new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> <Gruppe>"));
     commandSender.sendMessage(
-        new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> info"));
+        new TextComponent("§cSpieler Gruppe anzeigen: /Permission group <Spieler> info"));
     commandSender.sendMessage(
         new TextComponent("§cSpieler Prefix zuweisen: /Permission prefix <Spieler> <Prefix>"));
   }

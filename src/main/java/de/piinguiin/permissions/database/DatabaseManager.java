@@ -26,7 +26,7 @@ public class DatabaseManager {
 
   public Optional<PermissionGroup> findPermissionGroup(String id) {
     return Optional
-        .of(groupsDatastore.find(PermissionGroup.class).filter("groupId", id).get());
+        .ofNullable(groupsDatastore.find(PermissionGroup.class).filter("groupId", id).get());
   }
 
   public boolean createPermissionGroup(PermissionGroup permissionGroup) {
@@ -41,7 +41,7 @@ public class DatabaseManager {
 
   public Optional<PermissionUser> findPermissionUser(UUID uuid) {
     return Optional
-        .of(usersDatastore.find(PermissionUser.class).filter("uuid", uuid).get());
+        .ofNullable(usersDatastore.find(PermissionUser.class).filter("uuid", uuid).get());
   }
 
   public void updateUser(UUID uuid,String key, String value){

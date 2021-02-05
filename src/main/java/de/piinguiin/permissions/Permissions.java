@@ -27,7 +27,7 @@ public class Permissions {
   }
 
   public Optional<PermissionUser> getPermissionUserOfPlayer(UUID uuid) {
-    return Optional.of(this.permissionUserManager.getPermissionUsers().get(uuid));
+    return Optional.ofNullable(this.permissionUserManager.getPermissionUsers().get(uuid));
   }
 
   public PermissionGroup getPermissionGroupOfPlayer(UUID uuid) {

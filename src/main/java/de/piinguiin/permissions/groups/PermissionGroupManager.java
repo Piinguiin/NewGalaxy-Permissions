@@ -31,7 +31,7 @@ public class PermissionGroupManager {
   }
 
   public Optional<PermissionGroup> getGroup(String id){
-    return Optional.of(this.groups.get(id));
+    return Optional.ofNullable(this.groups.get(id));
   }
 
   public boolean createGroup(String id) {

@@ -148,12 +148,14 @@ public class PermissionSpigotCommand extends Command {
     commandSender
         .sendMessage("§cSpieler Gruppe zuweisen: /Permission user group <Spieler> <Gruppe>");
     commandSender
+        .sendMessage("§cSpieler Gruppe anzeigen: /Permission user group <Spieler> info");
+    commandSender
         .sendMessage("§cSpieler Prefix zuweisen: /Permission user prefix <Spieler> <Prefix>");
   }
 
   private void sendUserCommands(CommandSender commandSender) {
     commandSender.sendMessage("§cSpieler Gruppe zuweisen: /Permission group <Spieler> <Gruppe>");
-    commandSender.sendMessage("§cSpieler Gruppe zuweisen: /Permission group <Spieler> info");
+    commandSender.sendMessage("§cSpieler Gruppe anzeigen: /Permission group <Spieler> info");
     commandSender.sendMessage("§cSpieler Prefix zuweisen: /Permission prefix <Spieler> <Prefix>");
   }
 
