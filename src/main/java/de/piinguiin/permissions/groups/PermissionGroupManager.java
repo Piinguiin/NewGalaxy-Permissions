@@ -19,6 +19,11 @@ public class PermissionGroupManager {
   public PermissionGroupManager(DatabaseManager databaseManager) {
     this.databaseManager = databaseManager;
     this.groups = databaseManager.getAllGroups();
+
+    if(groups.isEmpty()){
+      createGroup("member");
+    }
+
     this.fallbackGroup = groups.getOrDefault("member", null);
     if (this.fallbackGroup == null) {
       throw new NullPointerException("No fallback group found! Please add a 'member' group!");
