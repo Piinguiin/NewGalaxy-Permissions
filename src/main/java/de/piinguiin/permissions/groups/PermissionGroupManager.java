@@ -35,6 +35,11 @@ public class PermissionGroupManager {
   }
 
   public boolean createGroup(String id) {
+
+    if(this.groups.containsKey(id)){
+      return false;
+    }
+
     PermissionGroup group = new PermissionGroup();
     group.setGroupId(id);
     group.setColor("§5");
