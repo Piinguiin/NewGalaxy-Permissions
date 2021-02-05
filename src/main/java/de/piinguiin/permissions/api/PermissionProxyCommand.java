@@ -18,7 +18,7 @@ public class PermissionProxyCommand extends Command {
   private final PermissionGroupManager groupManager;
 
   public PermissionProxyCommand(Permissions permissions, Plugin plugin) {
-    super("Permission","permission.edit","permissions");
+    super("Permission", "permission.edit", "permissions");
     this.permissions = permissions;
     this.plugin = plugin;
     this.groupManager = permissions.getPermissionGroupManager();
@@ -27,68 +27,73 @@ public class PermissionProxyCommand extends Command {
   @Override
   public void execute(CommandSender commandSender, String[] args) {
 
-    if(!commandSender.hasPermission("permission.edit")){
+    if (!commandSender.hasPermission("permission.edit")) {
       return;
     }
 
-    if(args.length == 0){
+    if (args.length == 0) {
       sendAllCommands(commandSender);
       return;
     }
 
     String sub = args[0];
 
-    if(sub.equalsIgnoreCase("group")){
+    if (sub.equalsIgnoreCase("group")) {
 
-      if(args.length == 1){
+      if (args.length == 1) {
         sendGroupCommands(commandSender);
         return;
       }
 
       String groupSub = args[1];
 
-      if(groupSub.equalsIgnoreCase("list")){
+      if (groupSub.equalsIgnoreCase("list")) {
         commandSender.sendMessage(new TextComponent(groupManager.getListOfAllGroups()));
         return;
       }
 
-      if(args.length != 3){
+      if (args.length != 3) {
         commandSender.sendMessage(new TextComponent("§cBitte gib einen Namen/GroupId an."));
         return;
       }
 
       String param = args[2];
 
-      if(groupSub.equalsIgnoreCase("create")) {
+      if (groupSub.equalsIgnoreCase("create")) {
 
-        if(groupManager.createGroup(param)){
-          commandSender.sendMessage(new TextComponent("§aDie Gruppe mit der Id "+param+" wurde erstellt!"));
+        if (groupManager.createGroup(param)) {
+          commandSender.sendMessage(
+              new TextComponent("§aDie Gruppe mit der Id " + param + " wurde erstellt!"));
           commandSender.sendMessage(new TextComponent("§aBitte bearbeite sie in der Datenbank."));
-        }else{
-          commandSender.sendMessage(new TextComponent("§cEs existiert bereits eine Gruppe mit dieser Id."));
+        } else {
+          commandSender
+              .sendMessage(new TextComponent("§cEs existiert bereits eine Gruppe mit dieser Id."));
         }
         return;
       }
 
-      if(groupSub.equalsIgnoreCase("remove")){
+      if (groupSub.equalsIgnoreCase("remove")) {
 
-        if(groupManager.removeGroup(param)){
-          commandSender.sendMessage(new TextComponent("§aDie Gruppe mit der Id "+param+" wurde gelöscht."));
-          commandSender.sendMessage(new TextComponent("§aBitte beachte dass alle Spieler dieser Gruppe nun"));
+        if (groupManager.removeGroup(param)) {
+          commandSender.sendMessage(
+              new TextComponent("§aDie Gruppe mit der Id " + param + " wurde gelöscht."));
+          commandSender.sendMessage(
+              new TextComponent("§aBitte beachte dass alle Spieler dieser Gruppe nun"));
           commandSender.sendMessage(new TextComponent("§aMember sind."));
-        }else{
-          commandSender.sendMessage(new TextComponent("§cEs existiert keine Gruppe mit dieser Id."));
+        } else {
+          commandSender
+              .sendMessage(new TextComponent("§cEs existiert keine Gruppe mit dieser Id."));
         }
-
+        return;
       }
 
       sendGroupCommands(commandSender);
       return;
     }
 
-    if(sub.equalsIgnoreCase("user")){
+    if (sub.equalsIgnoreCase("user")) {
 
-      if(args.length != 4){
+      if (args.length != 4) {
         sendUserCommands(commandSender);
         return;
       }
@@ -99,38 +104,43 @@ public class PermissionProxyCommand extends Command {
 
       UUID uuid = UUIDFetcher.getUUID(playerName);
 
-      if(uuid == null){
-        commandSender.sendMessage(new TextComponent("§cEs konnte kein Spieler mit diesem Namen gefunden werden."));
+      if (uuid == null) {
+        commandSender.sendMessage(
+            new TextComponent("§cEs konnte kein Spieler mit diesem Namen gefunden werden."));
         return;
       }
 
-      if(userSub.equalsIgnoreCase("group")){
+      if (userSub.equalsIgnoreCase("group")) {
 
-        if(param.equalsIgnoreCase("info")){
-          commandSender.sendMessage(new TextComponent("§a"+playerName+" hat den Rang: §r"+permissions.getPermissionGroupOfPlayer(uuid)));
+        if (param.equalsIgnoreCase("info")) {
+          commandSender.sendMessage(new TextComponent(
+              "§a" + playerName + " hat den Rang: §r" + permissions.getPermissionGroupOfPlayer(uuid)
+                  .getGroupId()));
           return;
         }
 
-        if(!groupManager.existsId(param)){
-          commandSender.sendMessage(new TextComponent("§CEs existiert keine Gruppe mit dieser Id."));
+        if (!groupManager.existsId(param)) {
+          commandSender
+              .sendMessage(new TextComponent("§CEs existiert keine Gruppe mit dieser Id."));
           return;
         }
 
-        permissions.getDatabaseManager().updateUser(uuid,"groupId",param);
-        commandSender.sendMessage(new TextComponent("§aDem Spieler "+playerName+" wurde die Gruppe "+param+" zugewiesen."));
+        permissions.getDatabaseManager().updateUser(uuid, "groupId", param);
+        commandSender.sendMessage(new TextComponent(
+            "§aDem Spieler " + playerName + " wurde die Gruppe " + param + " zugewiesen."));
 
         ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(playerName);
-        if(onlinePlayer != null){
+        if (onlinePlayer != null) {
           onlinePlayer.disconnect(new TextComponent("§ADir wurde ein neuer Rang zugewiesen."));
         }
         return;
       }
 
-      if(userSub.equalsIgnoreCase("prefix")){
-        permissions.getDatabaseManager().updateUser(uuid,"prefix",param);
+      if (userSub.equalsIgnoreCase("prefix")) {
+        permissions.getDatabaseManager().updateUser(uuid, "prefix", param);
         commandSender.sendMessage(new TextComponent("§aDer Spieler hat nun einen neuen Prefix."));
         ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(playerName);
-        if(onlinePlayer != null){
+        if (onlinePlayer != null) {
           onlinePlayer.disconnect(new TextComponent("§ADir wurde ein neuer Rang zugewiesen."));
         }
         return;
@@ -142,23 +152,33 @@ public class PermissionProxyCommand extends Command {
     sendAllCommands(commandSender);
   }
 
-  private void sendAllCommands(CommandSender commandSender){
-    commandSender.sendMessage(new TextComponent("§cGruppen auflisten: /Permission group list <Proxy|Server>"));
-    commandSender.sendMessage(new TextComponent("§cGruppen erstellen: /Permission group create <name>"));
-    commandSender.sendMessage(new TextComponent("§cGruppen löschen: /Permission group remove <name>"));
-    commandSender.sendMessage(new TextComponent("§cSpieler Gruppe zuweisen: /Permission user group <Spieler> <Gruppe>"));
-    commandSender.sendMessage(new TextComponent("§cSpieler Prefix zuweisen: /Permission user prefix <Spieler> <Prefix>"));
+  private void sendAllCommands(CommandSender commandSender) {
+    commandSender.sendMessage(
+        new TextComponent("§cGruppen auflisten: /Permission group list"));
+    commandSender
+        .sendMessage(new TextComponent("§cGruppen erstellen: /Permission group create <name>"));
+    commandSender
+        .sendMessage(new TextComponent("§cGruppen löschen: /Permission group remove <name>"));
+    commandSender.sendMessage(
+        new TextComponent("§cSpieler Gruppe zuweisen: /Permission user group <Spieler> <Gruppe>"));
+    commandSender.sendMessage(
+        new TextComponent("§cSpieler Prefix zuweisen: /Permission user prefix <Spieler> <Prefix>"));
   }
 
-  private void sendUserCommands(CommandSender commandSender){
-    commandSender.sendMessage(new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> <Gruppe>"));
-    commandSender.sendMessage(new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> info"));
-    commandSender.sendMessage(new TextComponent("§cSpieler Prefix zuweisen: /Permission prefix <Spieler> <Prefix>"));
+  private void sendUserCommands(CommandSender commandSender) {
+    commandSender.sendMessage(
+        new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> <Gruppe>"));
+    commandSender.sendMessage(
+        new TextComponent("§cSpieler Gruppe zuweisen: /Permission group <Spieler> info"));
+    commandSender.sendMessage(
+        new TextComponent("§cSpieler Prefix zuweisen: /Permission prefix <Spieler> <Prefix>"));
   }
 
-  private void sendGroupCommands(CommandSender commandSender){
+  private void sendGroupCommands(CommandSender commandSender) {
     commandSender.sendMessage(new TextComponent("§cGruppen auflisten: /Permission group list"));
-    commandSender.sendMessage(new TextComponent("§cGruppen erstellen: /Permission group create <name>"));
-    commandSender.sendMessage(new TextComponent("§cGruppen löschen: /Permission group remove <name>"));
+    commandSender
+        .sendMessage(new TextComponent("§cGruppen erstellen: /Permission group create <name>"));
+    commandSender
+        .sendMessage(new TextComponent("§cGruppen löschen: /Permission group remove <name>"));
   }
 }
