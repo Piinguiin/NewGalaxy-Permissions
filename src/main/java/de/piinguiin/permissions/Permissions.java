@@ -5,7 +5,9 @@ import de.piinguiin.permissions.database.DatabaseManager;
 import de.piinguiin.permissions.database.objects.PermissionGroup;
 import de.piinguiin.permissions.database.objects.PermissionUser;
 import de.piinguiin.permissions.groups.PermissionGroupManager;
+import de.piinguiin.permissions.user.PermissionUserBungeeManager;
 import de.piinguiin.permissions.user.PermissionUserManager;
+import de.piinguiin.permissions.user.PermissionUserSpigotManager;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
@@ -20,10 +22,11 @@ public class Permissions {
   @Getter
   private final PermissionUserManager permissionUserManager;
 
-  public Permissions(MongoClient mongoClient, Morphia morphia) {
+  public Permissions(MongoClient mongoClient, Morphia morphia, boolean spigot) {
     this.databaseManager = new DatabaseManager(mongoClient, morphia);
     this.permissionGroupManager = new PermissionGroupManager(databaseManager);
-    this.permissionUserManager = new PermissionUserManager(this);
+    this.permissionUserManager = spigot ? new PermissionUserSpigotManager(this) :
+        new PermissionUserBungeeManager(this);
   }
 
   public Optional<PermissionUser> getPermissionUserOfPlayer(UUID uuid) {
@@ -35,7 +38,7 @@ public class Permissions {
         .getOrDefault(uuid, this.permissionGroupManager.getFallbackGroup());
   }
 
-  public boolean hasDefaultGroup(UUID uuid){
+  public boolean hasDefaultGroup(UUID uuid) {
     return getPermissionGroupOfPlayer(uuid).getGroupId().equalsIgnoreCase("member");
   }
 
